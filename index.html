@@ -275,11 +275,35 @@
 
 <section data-id="app">
   <div class="card">
-    <span class="badge">Station 7</span><span class="badge time">15 min</span>
+    <span class="badge">Station 7</span><span class="badge time">18 min</span>
     <h2>📱 A tiny app, here</h2>
-    <p style="margin-top:8px">Build three screens about the lauhala rose you just learned. Examples: what lauhala is, how the coil is made, a finished-rose gallery. Each screen needs a title. Buttons must actually go to another screen.</p>
+    <p style="margin-top:8px">An app in this lab is three <b>screens</b> (pages) connected by <b>buttons</b>. Tapping a button runs a small program: “if this button is tapped, go to that screen.” You are making a mini how-to about the lauhala rose.</p>
+    <div class="key" style="margin-top:12px">
+      <b>One plan you can copy</b> — an instruction app, one idea per screen:<br>
+      <b>Screen 1 — What is lauhala?</b> Body: dried hala leaf used for mats and sails. Button A: “How to coil →” goes to Screen 2.<br>
+      <b>Screen 2 — How to make the rose</b> Body: hold a base strip, fold, roll, repeat. Button A: “See the rose →” goes to Screen 3. Button B (optional): “Back” goes to Screen 1.<br>
+      <b>Screen 3 — Finished rose</b> Body: a tight coil that looks like a small flower. Button A: “Start over” goes to Screen 1.
+    </div>
+    <p style="margin-top:10px">You may write your own titles instead, as long as they are about the rose.</p>
+    <h3 style="margin-top:14px">How to build it</h3>
+    <ol>
+      <li>In <b>Editing screen</b>, leave it on <b>1</b>.</li>
+      <li>Type a <b>Title</b> (at least two letters) and a short <b>Body</b>.</li>
+      <li>Type <b>Button A label</b> (the words on the button, e.g. “Next”). Under <b>Button A goes to</b>, pick Screen 2.</li>
+      <li>Change <b>Editing screen</b> to <b>2</b>. The boxes clear for screen 2 — that is normal. Fill title, body, and Button A (send it to Screen 3).</li>
+      <li>Change <b>Editing screen</b> to <b>3</b>. Fill title, body, and Button A (send it back to Screen 1, or to Screen 2).</li>
+      <li>Button B is optional. Use it for a “Back” button if you want two ways to move.</li>
+      <li>Watch <b>Preview</b> as you type. Tap the preview buttons to walk through the app like a student would.</li>
+      <li>Tap <b>Check my app</b> when you think it is done.</li>
+    </ol>
+    <div class="term" style="margin-top:8px">
+      <h3>Done when</h3>
+      <p>Every screen has a title. Every screen has Button A. Those buttons reach at least two different screens (so the app actually moves). Then tap <b>Finish station</b>.</p>
+    </div>
   </div>
   <div class="card">
+    <h3>Editor</h3>
+    <p class="muted">You are editing one screen at a time. Switch the number, fill the boxes, then switch to the next screen.</p>
     <label class="fld">Editing screen</label>
     <select class="fld" id="scrSel"><option value="0">1</option><option value="1">2</option><option value="2">3</option></select>
     <label class="fld">Title</label>
@@ -297,6 +321,7 @@
   </div>
   <div class="card">
     <h3>Preview (tap buttons)</h3>
+    <p class="muted">This is the running app. It shows the screen you are editing, and it changes when you tap a button.</p>
     <div class="app-preview" id="appPrev"></div>
     <p class="muted" id="appMsg"></p>
     <button type="button" class="btn" id="appCheck" style="margin-top:10px">Check my app</button>
@@ -733,6 +758,7 @@ const screens = [
 let curPrev = 0;
 function loadScr() {
   const i = +document.getElementById('scrSel').value;
+  curPrev = i;
   const s = screens[i];
   document.getElementById('scrTitle').value = s.title;
   document.getElementById('scrBody').value = s.body;
