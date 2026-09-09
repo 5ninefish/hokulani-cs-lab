@@ -86,6 +86,14 @@
   .cert h3 { color: #7de8bc; }
   .puzzle { border: 1.5px solid #3d3d5c; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
   .puzzle.won { border-color: #34d399; }
+  .term { background: #0f0f1a; border: 1.5px solid #3d3d5c; border-radius: 12px; padding: 14px 16px; margin: 10px 0; }
+  .term h3 { font-size: 16px; color: #a78bfa; margin-bottom: 6px; }
+  .term p { font-size: 15px; color: #c9c9de; margin: 0; line-height: 1.55; }
+  .demo-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+  .demo-step { flex: 1 1 140px; background: #0f0f1a; border: 1px solid #3d3d5c; border-radius: 12px; padding: 12px; text-align: center; }
+  .demo-step b { display: block; color: #60a5fa; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
+  .demo-step p { font-size: 14px; color: #c9c9de; margin: 0; line-height: 1.4; }
+  .rose-art { width: 100%; max-width: 320px; display: block; margin: 8px auto 4px; }
 </style>
 </head>
 <body>
@@ -108,10 +116,10 @@
     <p style="margin-top:8px">Work through the stations in order. Read the instructions, complete each activity on this page, then tap the button to continue.</p>
     <p style="margin-top:10px"><b>Topics you will cover</b></p>
     <ul>
-      <li><b>Algorithm, sequence, loop, conditional, program</b> — name each from everyday examples</li>
-      <li><b>Lauhala rose</b> — put the weaving steps in order</li>
-      <li><b>Artist</b> — draw with on-page blocks (square, hexagon, rose)</li>
-      <li><b>App</b> — build a 3-screen app with working buttons</li>
+      <li><b>Algorithm and program</b> — a list of steps, and that list written for a machine</li>
+      <li><b>Sequence, loop, and conditional</b> — order, repeat, and if/then</li>
+      <li><b>Lauhala rose</b> — what it is, how the coil is made, then put those steps in order</li>
+      <li><b>Artist and app</b> — draw with on-page blocks, then build a 3-screen app</li>
     </ul>
   </div>
   <div class="reqs" data-reqs="start"></div>
@@ -122,7 +130,9 @@
   <div class="card">
     <span class="badge">Station 2</span><span class="badge time">12 min</span>
     <h2>🧭 Algorithms</h2>
-    <p style="margin-top:8px">A dishwasher follows steps. So did Hawaiian weavers making a sail. Answer the tutor in a sentence. It will ask questions first, then name the idea.</p>
+    <p style="margin-top:8px">An <b>algorithm</b> is a step-by-step list of instructions for finishing a task. A recipe is an algorithm. A dishwasher cycle is an algorithm. Native Hawaiian weavers followed an algorithm when they made a sail or a mat — no computer required.</p>
+    <div class="key" style="margin-top:12px"><b>Algorithm</b> — the list of steps. Even a wrong list is still an algorithm; it just is not the one you wanted.<br><br><b>Program</b> — that same list written so a <i>machine</i> can run it. Coding is writing the algorithm for a machine.</div>
+    <p style="margin-top:10px">Answer the tutor about something you already do in steps. Then take the short check.</p>
   </div>
   <div class="card">
     <h3>Socratic tutor</h3>
@@ -145,14 +155,30 @@
 
 <section data-id="vocab">
   <div class="card">
-    <span class="badge">Station 3</span><span class="badge time">12 min</span>
-    <h2>🧩 Sort the tools</h2>
-    <p style="margin-top:8px">Tag each example. Definitions appear after you get them right.</p>
+    <span class="badge">Station 3</span><span class="badge time">15 min</span>
+    <h2>🧩 Sequence, loop, conditional, program</h2>
+    <p style="margin-top:8px">Read the four ideas first. Then tag each everyday example. (The lauhala rose comes in the next station.)</p>
+    <div class="term">
+      <h3>Sequence</h3>
+      <p>A series of actions in a specific order. Action 1, then Action 2, then Action 3, until the list is done. Shoes on, then walk out — never the reverse. A list in the wrong order is still a sequence; it is just not the sequence you wanted.</p>
+    </div>
+    <div class="term">
+      <h3>Loop</h3>
+      <p>A set of steps you repeat until a stopping point. Stir, stir, stir until the sauce is thick. Sleep, wake, sleep, wake every day. The repeat is the loop.</p>
+    </div>
+    <div class="term">
+      <h3>Conditional</h3>
+      <p>An if/then (and often else) choice. If it is raining, take an umbrella. Else leave it. The next step depends on a condition being true or false.</p>
+    </div>
+    <div class="term">
+      <h3>Program</h3>
+      <p>An algorithm written so a machine can run it. A recipe on paper is an algorithm. That recipe typed so a robot or this page’s artist can follow it is a program.</p>
+    </div>
   </div>
   <div class="card">
+    <h3>Tag each example</h3>
     <div id="tagGame"></div>
     <div class="feedback" id="tagFb"></div>
-    <div class="key" id="vocabDefs" style="display:none"><b>Sequence</b> — order. <b>Loop</b> — repeat. <b>Conditional</b> — if/then. <b>Program</b> — algorithm a machine can run.</div>
   </div>
   <div class="card">
     <h3>Check yourself</h3>
@@ -164,12 +190,32 @@
 
 <section data-id="order">
   <div class="card">
-    <span class="badge">Station 4</span><span class="badge time">15 min</span>
-    <h2>🌺 The unplugged program</h2>
-    <p style="margin-top:8px">Lauhala can get wet and keep its shape; kapa tears. Weavers picked the material, then followed steps. You will put the steps in order here — that <i>is</i> the activity. Physical strips are extra, not required.</p>
+    <span class="badge">Station 4</span><span class="badge time">18 min</span>
+    <h2>🌺 The lauhala rose</h2>
+    <p style="margin-top:8px"><b>Lauhala</b> is the dried leaf of the hala (pandanus) tree. Hawaiian weavers used it for mats, baskets, and sails because it can get wet and keep its shape. Kapa (bark cloth) tears when wet, so it would make a poor sail. The weavers chose the material, then followed steps.</p>
+    <p style="margin-top:8px">A <b>lauhala rose</b> is a small coiled flower made from a strip of that leaf. You hold one strip as a base, fold another strip over it, and roll. You keep folding and rolling. The coil grows into a tight blossom — like wrapping a ribbon into a rose. If the working strip gets short, you add another strip and keep going. When the coil is the size you want, you finish and secure it.</p>
+    <p class="muted">This lab is virtual. You do not need real leaves. Watch the four pictures, then put the direction cards in order.</p>
+    <svg class="rose-art" viewBox="0 0 320 120" aria-hidden="true">
+      <text x="40" y="14" fill="#8b8ba7" font-size="11">Hala leaf</text>
+      <path d="M20 110 Q40 20 70 110" fill="none" stroke="#34d399" stroke-width="8"/>
+      <path d="M55 110 Q80 10 110 110" fill="none" stroke="#2dd4bf" stroke-width="8"/>
+      <path d="M95 110 Q120 25 145 110" fill="none" stroke="#34d399" stroke-width="7"/>
+      <text x="200" y="14" fill="#8b8ba7" font-size="11">Lauhala rose (coil)</text>
+      <circle cx="240" cy="70" r="38" fill="none" stroke="#a78bfa" stroke-width="3"/>
+      <path d="M240 70 m-28 0 a28 28 0 1 1 14 24" fill="none" stroke="#c4b5fd" stroke-width="7" stroke-linecap="round"/>
+      <path d="M240 70 m-16 0 a16 16 0 1 1 8 14" fill="none" stroke="#34d399" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="240" cy="70" r="5" fill="#fbbf24"/>
+    </svg>
+    <div class="demo-row">
+      <div class="demo-step"><b>1. Base</b><p>Hold one strip flat. This is the core the coil wraps around.</p></div>
+      <div class="demo-step"><b>2. Fold</b><p>Lay a working strip over the base and fold it across.</p></div>
+      <div class="demo-step"><b>3. Roll</b><p>Roll the fold so the strip wraps the base. Fold and roll again.</p></div>
+      <div class="demo-step"><b>4. Rose</b><p>Keep repeating. The coil thickens into a small flower. Stop when it is big enough.</p></div>
+    </div>
   </div>
   <div class="card">
     <h3>Tap cards into order</h3>
+    <p class="muted">Each card is one event. Putting them in order makes a sequence — the algorithm for the rose.</p>
     <p class="muted">Your sequence</p>
     <div id="ordSeq"></div>
     <p class="muted">Pool</p>
@@ -188,7 +234,13 @@
   <div class="card">
     <span class="badge">Station 5</span><span class="badge time">10 min</span>
     <h2>🔁 Name the parts</h2>
-    <p style="margin-top:8px">The whole card list is an algorithm. Repeated fold-and-roll is a loop. “If four inches left, add a strip” is a conditional.</p>
+    <p style="margin-top:8px">You just ordered the rose algorithm. Now map each piece to the four ideas:</p>
+    <ul>
+      <li>The <b>whole ordered list</b> is the algorithm.</li>
+      <li>Repeated fold-and-roll is a <b>loop</b> — you do it until the rose is thick enough.</li>
+      <li>“If about four inches of strip remain, add a new strip; else keep weaving” is a <b>conditional</b>.</li>
+      <li>When those steps are written so this page’s artist can run them, that list becomes a <b>program</b>.</li>
+    </ul>
   </div>
   <div class="card">
     <div id="partsGame"></div>
@@ -202,7 +254,8 @@
   <div class="card">
     <span class="badge">Station 6</span><span class="badge time">20 min</span>
     <h2>🎨 Artist in this page</h2>
-    <p style="margin-top:8px">Tap blocks, run, and watch the artist. Pass three puzzles. A loop (Repeat) is the point of puzzle 1.</p>
+    <p style="margin-top:8px">Now you write a <b>program</b>: tap blocks so this page’s artist draws. Puzzle 1 is a square that uses a <b>loop</b> (Repeat). Puzzle 2 is a hexagon. Puzzle 3 is a simple coiled “rose” — a geometric stand-in for the lauhala rose, not a photo of a leaf.</p>
+    <p class="muted">Tap a block to add it, then Run. Undo and Clear are on the row below.</p>
   </div>
   <div class="card">
     <canvas class="turtle" id="turtle" width="360" height="360"></canvas>
@@ -224,7 +277,7 @@
   <div class="card">
     <span class="badge">Station 7</span><span class="badge time">15 min</span>
     <h2>📱 A tiny app, here</h2>
-    <p style="margin-top:8px">Three screens about your rose. Buttons must actually go somewhere. Works on iPad — nothing to download.</p>
+    <p style="margin-top:8px">Build three screens about the lauhala rose you just learned. Examples: what lauhala is, how the coil is made, a finished-rose gallery. Each screen needs a title. Buttons must actually go to another screen.</p>
   </div>
   <div class="card">
     <label class="fld">Editing screen</label>
@@ -440,10 +493,10 @@ buildQuiz('algoQuiz', [
 ], { onDone: () => req('algo', 'quiz_algo') });
 
 const tagItems = [
-  { t: 'Fold, roll, fold, roll until the rose is thick.', a: 'loop' },
-  { t: 'If four inches of leaf are left, add a strip. Else keep weaving.', a: 'conditional' },
-  { t: 'Shoes on, then walk out — never the reverse.', a: 'sequence' },
-  { t: 'Those weaving steps, written so this page’s artist can run them.', a: 'program' },
+  { t: 'Brush teeth, then rinse, then put the brush away.', a: 'sequence' },
+  { t: 'Stir the pot, stir again, keep stirring until the sauce is thick.', a: 'loop' },
+  { t: 'If it is raining, take an umbrella. Else leave it.', a: 'conditional' },
+  { t: 'A recipe typed so a robot or this page’s artist can follow it.', a: 'program' },
 ];
 const tags = ['sequence', 'loop', 'conditional', 'program'];
 const tagGame = document.getElementById('tagGame');
@@ -466,8 +519,8 @@ tagItems.forEach((it, n) => {
       });
       const fb = document.getElementById('tagFb');
       fb.className = 'feedback show ' + (ok === 4 ? 'good' : 'bad');
-      fb.textContent = ok === 4 ? '✓ All four.' : ok + ' / 4';
-      if (ok === 4) { document.getElementById('vocabDefs').style.display = 'block'; req('vocab', 'tags'); }
+      fb.textContent = ok === 4 ? '✓ All four.' : ok + ' / 4 — sequence = order, loop = repeat, conditional = if/then, program = algorithm a machine runs.';
+      if (ok === 4) req('vocab', 'tags');
     };
     row.appendChild(b);
   });
