@@ -76,7 +76,7 @@
   .sort-item.wrong2 { border-color: #f87171; }
   canvas.turtle { width: 100%; max-width: 360px; height: auto; background: #0b0b14; border: 1px solid #3d3d5c; border-radius: 12px; display: block; margin: 8px auto; }
   .codebox { background: #0b0b14; border: 1px dashed #4a4a6a; border-radius: 10px; padding: 10px 12px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; color: #c9c9de; min-height: 48px; margin: 8px 0; white-space: pre-wrap; }
-  .app-preview { background: #111827; border: 1px solid #3d3d5c; border-radius: 16px; padding: 18px; min-height: 180px; }
+  .app-preview { background: #111827; border: 2px solid #3d3d5c; border-radius: 22px; padding: 18px; min-height: 180px; max-width: 320px; }
   .app-preview h4 { color: #fff; margin-bottom: 8px; }
   .app-preview p { color: #c9c9de; font-size: 15px; }
   .app-preview button { -webkit-appearance: none; margin: 8px 8px 0 0; background: #2a1a4a; border: 1.5px solid #a78bfa; color: #d6c6ff; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
@@ -101,6 +101,27 @@
   @media (max-width: 560px) {
     .photo-pair { grid-template-columns: 1fr; }
     .photo-fig img { height: 220px; }
+  }
+  .viz { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 10px 0 8px; min-height: 52px; }
+  .viz .chip { background: #2a1a4a; border: 1.5px solid #a78bfa; color: #e6e0ff; border-radius: 10px; padding: 8px 10px; font-size: 13px; font-weight: 700; }
+  .viz .arr { color: #60a5fa; font-size: 18px; font-weight: 800; }
+  .viz .loopring { width: 52px; height: 52px; border: 4px solid #34d399; border-right-color: transparent; border-radius: 50%; position: relative; }
+  .viz .loopring::after { content: "↻"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #34d399; font-size: 22px; }
+  .viz .ifbox { background: #142138; border: 1.5px solid #60a5fa; color: #9ec8ff; border-radius: 10px; padding: 8px 10px; font-size: 13px; font-weight: 700; text-align: center; }
+  .viz .machine { background: #0b0b14; border: 1.5px dashed #4a4a6a; color: #c9c9de; border-radius: 10px; padding: 8px 12px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+  .phone-row { display: flex; align-items: stretch; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 14px 0 6px; }
+  .phone { flex: 1 1 170px; max-width: 210px; background: #111827; border: 2px solid #3d3d5c; border-radius: 22px; padding: 10px 10px 14px; box-shadow: 0 8px 24px #0006; }
+  .phone-bar { width: 72px; height: 6px; background: #2d2d4a; border-radius: 6px; margin: 2px auto 10px; }
+  .phone-num { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #a78bfa; margin-bottom: 6px; }
+  .phone img { width: 100%; height: 88px; object-fit: cover; border-radius: 10px; display: block; margin-bottom: 8px; }
+  .phone h4 { color: #fff; font-size: 15px; margin: 0 0 4px; }
+  .phone p { color: #c9c9de; font-size: 13px; line-height: 1.35; margin: 0 0 10px; }
+  .phone-btn { display: block; width: 100%; text-align: center; background: #2a1a4a; border: 1.5px solid #a78bfa; color: #d6c6ff; border-radius: 10px; padding: 8px 8px; font-size: 13px; font-weight: 700; margin-top: 6px; }
+  .phone-btn.ghost { background: transparent; border-color: #3d3d5c; color: #9aa3c0; }
+  .phone-arrow { display: flex; align-items: center; color: #60a5fa; font-size: 22px; font-weight: 800; padding: 0 2px; }
+  @media (max-width: 640px) {
+    .phone-arrow { width: 100%; justify-content: center; transform: rotate(90deg); }
+    .phone { max-width: none; }
   }
 </style>
 </head>
@@ -168,18 +189,22 @@
     <p style="margin-top:8px">Read the four ideas first. Then tag each everyday example. (The lauhala rose comes in the next station.)</p>
     <div class="term">
       <h3>Sequence</h3>
-      <p>A series of actions in a specific order. Action 1, then Action 2, then Action 3, until the list is done. Shoes on, then walk out — never the reverse. A list in the wrong order is still a sequence; it is just not the sequence you wanted.</p>
+      <div class="viz" aria-hidden="true"><span class="chip">1. Shoes on</span><span class="arr">→</span><span class="chip">2. Walk out</span><span class="arr">→</span><span class="chip">3. Done</span></div>
+      <p>A series of actions in a specific order. Action 1, then Action 2, then Action 3, until the list is done. Never the reverse. A list in the wrong order is still a sequence; it is just not the sequence you wanted.</p>
     </div>
     <div class="term">
       <h3>Loop</h3>
+      <div class="viz" aria-hidden="true"><span class="chip">fold</span><span class="arr">→</span><span class="chip">roll</span><div class="loopring"></div><span class="chip">until thick</span></div>
       <p>A set of steps you repeat until a stopping point. Stir, stir, stir until the sauce is thick. Sleep, wake, sleep, wake every day. The repeat is the loop.</p>
     </div>
     <div class="term">
       <h3>Conditional</h3>
-      <p>An if/then (and often else) choice. If it is raining, take an umbrella. Else leave it. The next step depends on a condition being true or false.</p>
+      <div class="viz" aria-hidden="true"><span class="ifbox">If raining?</span><span class="arr">→</span><span class="chip">Yes: umbrella</span><span class="arr">→</span><span class="chip">No: leave it</span></div>
+      <p>An if/then (and often else) choice. The next step depends on a condition being true or false.</p>
     </div>
     <div class="term">
       <h3>Program</h3>
+      <div class="viz" aria-hidden="true"><span class="chip">recipe on paper</span><span class="arr">→</span><span class="machine">run on a machine</span></div>
       <p>An algorithm written so a machine can run it. A recipe on paper is an algorithm. That recipe typed so a robot or this page’s artist can follow it is a program.</p>
     </div>
   </div>
@@ -295,14 +320,41 @@
   <div class="card">
     <span class="badge">Station 7</span><span class="badge time">18 min</span>
     <h2>📱 A tiny app, here</h2>
-    <p style="margin-top:8px">An app in this lab is three <b>screens</b> (pages) connected by <b>buttons</b>. Tapping a button runs a small program: “if this button is tapped, go to that screen.” You are making a mini how-to about the lauhala rose.</p>
-    <div class="key" style="margin-top:12px">
-      <b>One plan you can copy</b> — an instruction app, one idea per screen:<br>
-      <b>Screen 1 — What is lauhala?</b> Body: dried hala leaf used for mats and sails. Button A: “How to coil →” goes to Screen 2.<br>
-      <b>Screen 2 — How to make the rose</b> Body: hold a base strip, fold, roll, repeat. Button A: “See the rose →” goes to Screen 3. Button B (optional): “Back” goes to Screen 1.<br>
-      <b>Screen 3 — Finished rose</b> Body: a tight coil that looks like a small flower. Button A: “Start over” goes to Screen 1.
+    <p style="margin-top:8px">An app in this lab is three <b>screens</b> (pages) connected by <b>buttons</b>. Tapping a button runs a small program: “if this button is tapped, go to that screen.” Copy the three phones below, or write your own rose titles.</p>
+    <p class="muted" style="margin-top:8px">Worked example — this is what a finished app looks like. Screen 1 → 2 → 3, then back to 1.</p>
+    <div class="phone-row">
+      <div class="phone">
+        <div class="phone-bar"></div>
+        <div class="phone-num">Screen 1</div>
+        <img src="img/hala-leaf.jpg" alt="">
+        <h4>What is lauhala?</h4>
+        <p>Dried hala leaf used for mats and sails.</p>
+        <span class="phone-btn">How to coil →</span>
+      </div>
+      <div class="phone-arrow" aria-hidden="true">→</div>
+      <div class="phone">
+        <div class="phone-bar"></div>
+        <div class="phone-num">Screen 2</div>
+        <img src="img/lauhala-rolling.jpg" alt="">
+        <h4>How to make the rose</h4>
+        <p>Hold a base strip, fold, roll, repeat.</p>
+        <span class="phone-btn">See the rose →</span>
+        <span class="phone-btn ghost">Back</span>
+      </div>
+      <div class="phone-arrow" aria-hidden="true">→</div>
+      <div class="phone">
+        <div class="phone-bar"></div>
+        <div class="phone-num">Screen 3</div>
+        <img src="img/lauhala-rose.jpg" alt="">
+        <h4>Finished rose</h4>
+        <p>A tight coil that looks like a small flower.</p>
+        <span class="phone-btn">Start over</span>
+      </div>
     </div>
-    <p style="margin-top:10px">You may write your own titles instead, as long as they are about the rose.</p>
+    <div class="key">
+      Type these into the editor:<br>
+      Screen 1 Button A goes to <b>Screen 2</b>. Screen 2 Button A goes to <b>Screen 3</b>, Button B (Back) goes to <b>Screen 1</b>. Screen 3 Button A goes to <b>Screen 1</b>.
+    </div>
     <h3 style="margin-top:14px">How to build it</h3>
     <ol>
       <li>In <b>Editing screen</b>, leave it on <b>1</b>.</li>
