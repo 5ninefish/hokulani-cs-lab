@@ -91,7 +91,7 @@
 <body>
 <header>
   <h1>Computer Science</h1>
-  <p>Autonomous Code Lab · June 2026 CLD lesson · you can finish this alone</p>
+  <p>Code Lab · June 2026 CLD lesson</p>
 </header>
 <div class="progress-wrap">
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
@@ -104,12 +104,14 @@
   <div class="card">
     <div class="hero-css">🌺 → 💻</div>
     <span class="badge">Station 1</span><span class="badge time">5 min</span>
-    <h2>You are the teacher today</h2>
-    <p style="margin-top:8px">This is not a class with someone at the front. The lab asks, you answer, you <b>build inside this page</b>. No Kahoot PIN. No waiting for a projector. No Code.org login required.</p>
+    <h2>How to use this lab</h2>
+    <p style="margin-top:8px">Work through the stations in order. Read the instructions, complete each activity on this page, then tap the button to continue.</p>
+    <p style="margin-top:10px"><b>Topics you will cover</b></p>
     <ul>
-      <li>Name <b>algorithm, sequence, loop, conditional, program</b> from examples you already know</li>
-      <li>Order a <b>lauhala rose</b> algorithm (virtual — strips optional)</li>
-      <li>Draw with a built-in artist, then make a 3-screen app — both here</li>
+      <li><b>Algorithm, sequence, loop, conditional, program</b> — name each from everyday examples</li>
+      <li><b>Lauhala rose</b> — put the weaving steps in order</li>
+      <li><b>Artist</b> — draw with on-page blocks (square, hexagon, rose)</li>
+      <li><b>App</b> — build a 3-screen app with working buttons</li>
     </ul>
   </div>
   <div class="reqs" data-reqs="start"></div>
@@ -119,8 +121,8 @@
 <section data-id="algo">
   <div class="card">
     <span class="badge">Station 2</span><span class="badge time">12 min</span>
-    <h2>🧭 Teach it to yourself</h2>
-    <p style="margin-top:8px">A dishwasher follows steps. So did Hawaiian weavers making a sail. Talk to the tutor. It will ask first — you try, then it names the idea.</p>
+    <h2>🧭 Algorithms</h2>
+    <p style="margin-top:8px">A dishwasher follows steps. So did Hawaiian weavers making a sail. Answer the tutor in a sentence. It will ask questions first, then name the idea.</p>
   </div>
   <div class="card">
     <h3>Socratic tutor</h3>
@@ -200,7 +202,7 @@
   <div class="card">
     <span class="badge">Station 6</span><span class="badge time">20 min</span>
     <h2>🎨 Artist in this page</h2>
-    <p style="margin-top:8px">No Code.org account. Tap blocks, run, watch the artist. Pass three puzzles. A loop (Repeat) is the point of puzzle 1.</p>
+    <p style="margin-top:8px">Tap blocks, run, and watch the artist. Pass three puzzles. A loop (Repeat) is the point of puzzle 1.</p>
   </div>
   <div class="card">
     <canvas class="turtle" id="turtle" width="360" height="360"></canvas>
@@ -396,8 +398,9 @@ let turns = 0;
 function addMsg(role, text) {
   const d = document.createElement('div'); d.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
   d.textContent = text; chatLog.appendChild(d); chatLog.scrollTop = chatLog.scrollHeight;
+  return d;
 }
-addMsg('bot', "Aloha. No teacher here — just us. Name something you do that has steps in a specific order.");
+addMsg('bot', "Aloha. Name something you do that has steps in a specific order.");
 async function sendChat() {
   const inp = document.getElementById('chatInput');
   const text = inp.value.trim();
