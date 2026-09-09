@@ -93,7 +93,15 @@
   .demo-step { flex: 1 1 140px; background: #0f0f1a; border: 1px solid #3d3d5c; border-radius: 12px; padding: 12px; text-align: center; }
   .demo-step b { display: block; color: #60a5fa; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
   .demo-step p { font-size: 14px; color: #c9c9de; margin: 0; line-height: 1.4; }
-  .rose-art { width: 100%; max-width: 320px; display: block; margin: 8px auto 4px; }
+  .demo-step img { width: 100%; height: 112px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; display: block; }
+  .photo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0 8px; }
+  .photo-fig { margin: 0; }
+  .photo-fig img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; border: 1px solid #3d3d5c; display: block; }
+  .photo-fig figcaption { font-size: 13px; color: #9aa3c0; margin-top: 6px; line-height: 1.4; }
+  @media (max-width: 560px) {
+    .photo-pair { grid-template-columns: 1fr; }
+    .photo-fig img { height: 220px; }
+  }
 </style>
 </head>
 <body>
@@ -194,28 +202,38 @@
     <h2>🌺 The lauhala rose</h2>
     <p style="margin-top:8px"><b>Lauhala</b> is the dried leaf of the hala (pandanus) tree. Hawaiian weavers used it for mats, baskets, and sails because it can get wet and keep its shape. Kapa (bark cloth) tears when wet, so it would make a poor sail. The weavers chose the material, then followed steps.</p>
     <p style="margin-top:8px">A <b>lauhala rose</b> is a small coiled flower made from a strip of that leaf. You hold one strip as a base, fold another strip over it, and roll. You keep folding and rolling. The coil grows into a tight blossom — like wrapping a ribbon into a rose. If the working strip gets short, you add another strip and keep going. When the coil is the size you want, you finish and secure it.</p>
-    <p class="muted">This lab is virtual. You do not need real leaves. Watch the four pictures, then put the direction cards in order.</p>
-    <svg class="rose-art" viewBox="0 0 320 120" aria-hidden="true">
-      <text x="40" y="14" fill="#8b8ba7" font-size="11">Hala leaf</text>
-      <path d="M20 110 Q40 20 70 110" fill="none" stroke="#34d399" stroke-width="8"/>
-      <path d="M55 110 Q80 10 110 110" fill="none" stroke="#2dd4bf" stroke-width="8"/>
-      <path d="M95 110 Q120 25 145 110" fill="none" stroke="#34d399" stroke-width="7"/>
-      <text x="200" y="14" fill="#8b8ba7" font-size="11">Lauhala rose (coil)</text>
-      <circle cx="240" cy="70" r="38" fill="none" stroke="#a78bfa" stroke-width="3"/>
-      <path d="M240 70 m-28 0 a28 28 0 1 1 14 24" fill="none" stroke="#c4b5fd" stroke-width="7" stroke-linecap="round"/>
-      <path d="M240 70 m-16 0 a16 16 0 1 1 8 14" fill="none" stroke="#34d399" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="240" cy="70" r="5" fill="#fbbf24"/>
-    </svg>
+    <p class="muted">This lab is virtual. You do not need real leaves. Look at the photos, then put the mixed-up direction cards in order.</p>
+    <div class="photo-pair">
+      <figure class="photo-fig">
+        <img src="img/hala-leaf.jpg" alt="Fresh green hala leaf with thorns along the edges, a pūhala tree and ocean behind it">
+        <figcaption><b>Hala leaf</b> — long, stiff, thorny. After it is dried and destemmed it becomes lauhala for weaving.</figcaption>
+      </figure>
+      <figure class="photo-fig">
+        <img src="img/lauhala-rose.jpg" alt="A finished golden-brown lauhala rose coiled from dried pandanus leaf, held in a palm">
+        <figcaption><b>Lauhala rose</b> — the same leaf, folded and rolled into a tight coil that looks like a small flower.</figcaption>
+      </figure>
+    </div>
     <div class="demo-row">
-      <div class="demo-step"><b>1. Base</b><p>Hold one strip flat. This is the core the coil wraps around.</p></div>
-      <div class="demo-step"><b>2. Fold</b><p>Lay a working strip over the base and fold it across.</p></div>
-      <div class="demo-step"><b>3. Roll</b><p>Roll the fold so the strip wraps the base. Fold and roll again.</p></div>
-      <div class="demo-step"><b>4. Rose</b><p>Keep repeating. The coil thickens into a small flower. Stop when it is big enough.</p></div>
+      <div class="demo-step">
+        <img src="img/lauhala-strip.jpg" alt="A flat dried golden lauhala strip on a wooden table">
+        <b>1. Base</b>
+        <p>Hold one dried strip flat. This is the core the coil wraps around.</p>
+      </div>
+      <div class="demo-step">
+        <img src="img/lauhala-rolling.jpg" alt="Hands folding a lauhala strip and rolling it into a growing coil">
+        <b>2–3. Fold and roll</b>
+        <p>Fold a working strip over the base and roll. Repeat. That repeat is a loop.</p>
+      </div>
+      <div class="demo-step">
+        <img src="img/lauhala-rose.jpg" alt="Finished lauhala rose">
+        <b>4. Rose</b>
+        <p>Keep looping until the coil is thick enough, then finish and secure.</p>
+      </div>
     </div>
   </div>
   <div class="card">
     <h3>Tap cards into order</h3>
-    <p class="muted">Each card is one event. Putting them in order makes a sequence — the algorithm for the rose.</p>
+    <p class="muted">The cards in the pool are mixed. Tap them in the order you think is correct. Each card is one event. Putting them in order makes a sequence — the algorithm for the rose.</p>
     <p class="muted">Your sequence</p>
     <div id="ordSeq"></div>
     <p class="muted">Pool</p>
@@ -564,7 +582,16 @@ const ORD = [
   { id: 5, text: 'Keep looping until the rose is the size you want.' },
   { id: 6, text: 'Finish and secure.' },
 ];
-let pool = ORD.map(x => x.id), seq = [];
+function shuffleIds() {
+  const a = ORD.map(x => x.id);
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  if (a.every((id, i) => id === i + 1)) { const tmp = a[0]; a[0] = a[1]; a[1] = tmp; }
+  return a;
+}
+let pool = shuffleIds(), seq = [];
 function renderOrd() {
   const poolEl = document.getElementById('ordPool'), seqEl = document.getElementById('ordSeq');
   poolEl.innerHTML = ''; seqEl.innerHTML = '';
@@ -581,7 +608,7 @@ function renderOrd() {
   });
 }
 renderOrd();
-document.getElementById('ordReset').onclick = () => { pool = ORD.map(x => x.id); seq = []; document.getElementById('ordFb').className = 'feedback'; renderOrd(); };
+document.getElementById('ordReset').onclick = () => { pool = shuffleIds(); seq = []; document.getElementById('ordFb').className = 'feedback'; renderOrd(); };
 document.getElementById('ordCheck').onclick = () => {
   const ok = seq.length === 6 && seq.every((id, i) => id === i + 1);
   const fb = document.getElementById('ordFb');
