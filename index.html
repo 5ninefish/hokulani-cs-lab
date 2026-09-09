@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Computer Science — Autonomous Code Lab</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #f0f0f0; min-height: 100vh; padding-bottom: 80px; }
+  header { text-align: center; padding: 22px 16px 10px; }
+  header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(135deg, #a78bfa, #60a5fa, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  header p { color: #8b8ba7; font-size: 13px; margin-top: 4px; }
+  .progress-wrap { max-width: 700px; margin: 10px auto 0; padding: 0 16px; }
+  .progress-bar { height: 8px; background: #1a1a2e; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; border-radius: 4px; background: linear-gradient(90deg, #a78bfa, #60a5fa, #34d399); transition: width .4s; }
+  .progress-label { font-size: 11px; color: #8b8ba7; text-align: right; margin-top: 4px; }
+  nav { display: flex; gap: 6px; overflow-x: auto; padding: 14px 16px 10px; max-width: 732px; margin: 0 auto; -webkit-overflow-scrolling: touch; }
+  nav button { flex: 0 0 auto; background: #1a1a2e; border: 1.5px solid #2d2d4a; border-radius: 20px; color: #c0c0d8; font-size: 13px; font-weight: 600; padding: 9px 14px; cursor: pointer; -webkit-appearance: none; white-space: nowrap; }
+  nav button.active { border-color: #a78bfa; background: #2a1a4a; color: #fff; }
+  nav button.done::after { content: " ✓"; color: #34d399; }
+  nav button.locked { opacity: .38; }
+  nav button.locked::before { content: "🔒 "; font-size: 11px; }
+  main { max-width: 700px; margin: 0 auto; padding: 6px 16px 40px; }
+  section { display: none; }
+  section.visible { display: block; animation: fadeIn .25s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform:none;} }
+  .card { background: #1a1a2e; border: 1px solid #2d2d4a; border-radius: 16px; padding: 20px; margin-bottom: 14px; }
+  .card h2 { font-size: 21px; margin-bottom: 4px; }
+  .card h3 { font-size: 16px; margin-bottom: 8px; color: #e6e6f5; }
+  .card p, .card li { font-size: 16px; line-height: 1.6; color: #c9c9de; }
+  .card ul, .card ol { padding-left: 22px; margin: 8px 0; }
+  .card li { margin-bottom: 6px; }
+  .muted { color: #9aa3c0; font-size: 14px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #a78bfa; background: #2a1a4a; border-radius: 6px; padding: 3px 8px; margin-bottom: 8px; margin-right: 6px; }
+  .badge.time { color: #60a5fa; background: #142138; }
+  .key { background: #0f0f1a; border: 1px solid #3d3d5c; border-radius: 10px; padding: 12px 14px; margin: 10px 0; font-size: 16px; line-height: 1.55; }
+  .key b { color: #a78bfa; }
+  .btn { display: inline-block; background: linear-gradient(135deg, #7c5cf0, #4f8ef7); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; padding: 14px 22px; cursor: pointer; -webkit-appearance: none; text-decoration: none; text-align: center; }
+  .btn.secondary { background: #1a1a2e; border: 1.5px solid #3d3d5c; color: #c0c0d8; font-weight: 600; }
+  .btn.small { font-size: 14px; padding: 10px 16px; }
+  .btn:disabled { opacity: .4; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .choice { display: block; width: 100%; text-align: left; background: #0f0f1a; border: 1.5px solid #3d3d5c; border-radius: 12px; color: #e0e0f0; font-size: 16px; line-height: 1.4; padding: 13px 15px; margin-bottom: 9px; cursor: pointer; -webkit-appearance: none; }
+  .choice.correct { border-color: #34d399; background: #10291f; }
+  .choice.wrong { border-color: #f87171; background: #2b1420; }
+  .choice:disabled { cursor: default; }
+  .feedback { font-size: 15px; line-height: 1.5; margin: 6px 0 14px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { color: #34d399; }
+  .feedback.bad { color: #f8a3a3; }
+  .reqs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+  .req-chip { font-size: 12px; font-weight: 600; border-radius: 999px; padding: 6px 12px; background: #1a1a2e; border: 1.5px solid #3d3d5c; color: #8b8ba7; }
+  .req-chip.met { border-color: #34d399; color: #7de8bc; }
+  .done-row { margin-top: 10px; text-align: center; }
+  .done-btn { -webkit-appearance: none; background: #10291f; border: 1.5px solid #34d399; color: #7de8bc; border-radius: 12px; font-size: 15px; font-weight: 700; padding: 13px 22px; cursor: pointer; }
+  .done-btn.checked { background: #34d399; color: #06281a; }
+  .done-btn:disabled { opacity: .35; }
+  .score-pill { display: inline-block; background: #142138; border: 1.5px solid #60a5fa; color: #9ec8ff; border-radius: 999px; font-size: 14px; font-weight: 700; padding: 8px 16px; margin-top: 8px; }
+  .hero-css { width: calc(100% + 40px); margin: -20px -20px 16px; height: 150px; border-radius: 15px 15px 0 0; background: radial-gradient(circle at 20% 80%, #34d39944, transparent 50%), radial-gradient(circle at 80% 20%, #a78bfa66, transparent 45%), linear-gradient(135deg, #142138, #2a1a4a); display: flex; align-items: flex-end; padding: 16px 20px; font-size: 28px; }
+  .chatbox { background: #0f0f1a; border: 1px solid #3d3d5c; border-radius: 14px; overflow: hidden; }
+  .chat-log { max-height: 300px; overflow-y: auto; padding: 14px; -webkit-overflow-scrolling: touch; }
+  .msg { max-width: 85%; border-radius: 14px; padding: 11px 14px; margin-bottom: 9px; font-size: 15px; line-height: 1.5; white-space: pre-wrap; }
+  .msg.user { background: #2a1a4a; border: 1px solid #a78bfa55; margin-left: auto; color: #eee6ff; }
+  .msg.bot { background: #1a1a2e; border: 1px solid #2d2d4a; color: #d5d5e8; }
+  .chat-input { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #2d2d4a; }
+  .chat-input input { flex: 1; background: #1a1a2e; border: 1px solid #3d3d5c; border-radius: 10px; color: #f0f0f0; font-size: 16px; padding: 11px 13px; outline: none; -webkit-appearance: none; }
+  .chat-input button { -webkit-appearance: none; background: linear-gradient(135deg, #7c5cf0, #4f8ef7); border: none; color: #fff; border-radius: 10px; font-size: 15px; font-weight: 700; padding: 11px 16px; cursor: pointer; }
+  .ord-card { display: block; width: 100%; text-align: left; background: #0f0f1a; border: 1.5px solid #3d3d5c; border-radius: 12px; color: #e0e0f0; font-size: 15px; padding: 12px 14px; margin-bottom: 8px; cursor: pointer; -webkit-appearance: none; }
+  .ord-seq .ord-card { border-color: #a78bfa; background: #2a1a4a; }
+  .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .tag-row button, .chipbtn { -webkit-appearance: none; border: 1.5px solid #3d3d5c; background: #1a1a2e; color: #c0c0d8; border-radius: 9px; font-size: 13px; font-weight: 700; padding: 10px 12px; cursor: pointer; }
+  .tag-row button.on, .chipbtn.on { border-color: #a78bfa; color: #d6c6ff; background: #2a1a4a; }
+  .sort-item { background: #0f0f1a; border: 1.5px solid #3d3d5c; border-radius: 12px; padding: 11px 14px; margin-bottom: 9px; }
+  .sort-item span { font-size: 15px; line-height: 1.35; color: #e0e0f0; display: block; }
+  .sort-item.right { border-color: #34d399; }
+  .sort-item.wrong2 { border-color: #f87171; }
+  canvas.turtle { width: 100%; max-width: 360px; height: auto; background: #0b0b14; border: 1px solid #3d3d5c; border-radius: 12px; display: block; margin: 8px auto; }
+  .codebox { background: #0b0b14; border: 1px dashed #4a4a6a; border-radius: 10px; padding: 10px 12px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; color: #c9c9de; min-height: 48px; margin: 8px 0; white-space: pre-wrap; }
+  .app-preview { background: #111827; border: 1px solid #3d3d5c; border-radius: 16px; padding: 18px; min-height: 180px; }
+  .app-preview h4 { color: #fff; margin-bottom: 8px; }
+  .app-preview p { color: #c9c9de; font-size: 15px; }
+  .app-preview button { -webkit-appearance: none; margin: 8px 8px 0 0; background: #2a1a4a; border: 1.5px solid #a78bfa; color: #d6c6ff; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
+  label.fld { display: block; font-size: 12px; color: #8b8ba7; margin: 8px 0 4px; }
+  input.fld, select.fld { width: 100%; background: #0f0f1a; border: 1px solid #3d3d5c; border-radius: 10px; color: #f0f0f0; font-size: 16px; padding: 10px 12px; -webkit-appearance: none; }
+  .cert { text-align: center; border: 2px solid #34d399; border-radius: 16px; padding: 22px; background: #10291f; }
+  .cert h3 { color: #7de8bc; }
+  .puzzle { border: 1.5px solid #3d3d5c; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+  .puzzle.won { border-color: #34d399; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Computer Science</h1>
+  <p>Autonomous Code Lab · June 2026 CLD lesson · you can finish this alone</p>
+</header>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel"></div>
+</div>
+<nav id="nav"></nav>
+<main>
+
+<section data-id="start">
+  <div class="card">
+    <div class="hero-css">🌺 → 💻</div>
+    <span class="badge">Station 1</span><span class="badge time">5 min</span>
+    <h2>You are the teacher today</h2>
+    <p style="margin-top:8px">This is not a class with someone at the front. The lab asks, you answer, you <b>build inside this page</b>. No Kahoot PIN. No waiting for a projector. No Code.org login required.</p>
+    <ul>
+      <li>Name <b>algorithm, sequence, loop, conditional, program</b> from examples you already know</li>
+      <li>Order a <b>lauhala rose</b> algorithm (virtual — strips optional)</li>
+      <li>Draw with a built-in artist, then make a 3-screen app — both here</li>
+    </ul>
+  </div>
+  <div class="reqs" data-reqs="start"></div>
+  <div class="done-row"><button class="done-btn" data-done="start">Start the lab 🔓</button></div>
+</section>
+
+<section data-id="algo">
+  <div class="card">
+    <span class="badge">Station 2</span><span class="badge time">12 min</span>
+    <h2>🧭 Teach it to yourself</h2>
+    <p style="margin-top:8px">A dishwasher follows steps. So did Hawaiian weavers making a sail. Talk to the tutor. It will ask first — you try, then it names the idea.</p>
+  </div>
+  <div class="card">
+    <h3>Socratic tutor</h3>
+    <div class="chatbox">
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-input">
+        <input id="chatInput" placeholder="Answer in a sentence…" autocomplete="off">
+        <button type="button" id="chatSend">Send</button>
+      </div>
+    </div>
+    <p class="muted" id="chatStatus"></p>
+  </div>
+  <div class="card">
+    <h3>Lock it in</h3>
+    <div id="algoQuiz"></div>
+  </div>
+  <div class="reqs" data-reqs="algo"></div>
+  <div class="done-row"><button class="done-btn" data-done="algo">Finish station → unlock next 🔓</button></div>
+</section>
+
+<section data-id="vocab">
+  <div class="card">
+    <span class="badge">Station 3</span><span class="badge time">12 min</span>
+    <h2>🧩 Sort the tools</h2>
+    <p style="margin-top:8px">Tag each example. Definitions appear after you get them right.</p>
+  </div>
+  <div class="card">
+    <div id="tagGame"></div>
+    <div class="feedback" id="tagFb"></div>
+    <div class="key" id="vocabDefs" style="display:none"><b>Sequence</b> — order. <b>Loop</b> — repeat. <b>Conditional</b> — if/then. <b>Program</b> — algorithm a machine can run.</div>
+  </div>
+  <div class="card">
+    <h3>Check yourself</h3>
+    <div id="vocabQuiz"></div>
+  </div>
+  <div class="reqs" data-reqs="vocab"></div>
+  <div class="done-row"><button class="done-btn" data-done="vocab">Finish station → unlock next 🔓</button></div>
+</section>
+
+<section data-id="order">
+  <div class="card">
+    <span class="badge">Station 4</span><span class="badge time">15 min</span>
+    <h2>🌺 The unplugged program</h2>
+    <p style="margin-top:8px">Lauhala can get wet and keep its shape; kapa tears. Weavers picked the material, then followed steps. You will put the steps in order here — that <i>is</i> the activity. Physical strips are extra, not required.</p>
+  </div>
+  <div class="card">
+    <h3>Tap cards into order</h3>
+    <p class="muted">Your sequence</p>
+    <div id="ordSeq"></div>
+    <p class="muted">Pool</p>
+    <div id="ordPool"></div>
+    <div class="btn-row">
+      <button type="button" class="btn" id="ordCheck">Check order</button>
+      <button type="button" class="btn secondary" id="ordReset">Reset</button>
+    </div>
+    <div class="feedback" id="ordFb"></div>
+  </div>
+  <div class="reqs" data-reqs="order"></div>
+  <div class="done-row"><button class="done-btn" data-done="order">Finish station → unlock next 🔓</button></div>
+</section>
+
+<section data-id="parts">
+  <div class="card">
+    <span class="badge">Station 5</span><span class="badge time">10 min</span>
+    <h2>🔁 Name the parts</h2>
+    <p style="margin-top:8px">The whole card list is an algorithm. Repeated fold-and-roll is a loop. “If four inches left, add a strip” is a conditional.</p>
+  </div>
+  <div class="card">
+    <div id="partsGame"></div>
+    <div class="feedback" id="partsFb"></div>
+  </div>
+  <div class="reqs" data-reqs="parts"></div>
+  <div class="done-row"><button class="done-btn" data-done="parts">Finish station → unlock next 🔓</button></div>
+</section>
+
+<section data-id="draw">
+  <div class="card">
+    <span class="badge">Station 6</span><span class="badge time">20 min</span>
+    <h2>🎨 Artist in this page</h2>
+    <p style="margin-top:8px">No Code.org account. Tap blocks, run, watch the artist. Pass three puzzles. A loop (Repeat) is the point of puzzle 1.</p>
+  </div>
+  <div class="card">
+    <canvas class="turtle" id="turtle" width="360" height="360"></canvas>
+    <div class="codebox" id="codeView">(empty)</div>
+    <div class="btn-row" id="blockBtns"></div>
+    <div class="btn-row">
+      <button type="button" class="btn" id="runBtn">Run</button>
+      <button type="button" class="btn secondary" id="undoBtn">Undo</button>
+      <button type="button" class="btn secondary" id="clearBtn">Clear</button>
+    </div>
+    <p class="muted" id="drawMsg"></p>
+    <div id="puzzles"></div>
+  </div>
+  <div class="reqs" data-reqs="draw"></div>
+  <div class="done-row"><button class="done-btn" data-done="draw">Finish station → unlock next 🔓</button></div>
+</section>
+
+<section data-id="app">
+  <div class="card">
+    <span class="badge">Station 7</span><span class="badge time">15 min</span>
+    <h2>📱 A tiny app, here</h2>
+    <p style="margin-top:8px">Three screens about your rose. Buttons must actually go somewhere. Works on iPad — nothing to download.</p>
+  </div>
+  <div class="card">
+    <label class="fld">Editing screen</label>
+    <select class="fld" id="scrSel"><option value="0">1</option><option value="1">2</option><option value="2">3</option></select>
+    <label class="fld">Title</label>
+    <input class="fld" id="scrTitle" maxlength="40">
+    <label class="fld">Body</label>
+    <input class="fld" id="scrBody" maxlength="80">
+    <label class="fld">Button A label</label>
+    <input class="fld" id="scrA" maxlength="20">
+    <label class="fld">Button A goes to</label>
+    <select class="fld" id="scrAto"><option value="0">Screen 1</option><option value="1">Screen 2</option><option value="2">Screen 3</option></select>
+    <label class="fld">Button B label (optional)</label>
+    <input class="fld" id="scrB" maxlength="20">
+    <label class="fld">Button B goes to</label>
+    <select class="fld" id="scrBto"><option value="0">Screen 1</option><option value="1">Screen 2</option><option value="2">Screen 3</option></select>
+  </div>
+  <div class="card">
+    <h3>Preview (tap buttons)</h3>
+    <div class="app-preview" id="appPrev"></div>
+    <p class="muted" id="appMsg"></p>
+    <button type="button" class="btn" id="appCheck" style="margin-top:10px">Check my app</button>
+  </div>
+  <div class="reqs" data-reqs="app"></div>
+  <div class="done-row"><button class="done-btn" data-done="app">Finish station → unlock next 🔓</button></div>
+</section>
+
+<section data-id="wrap">
+  <div class="card">
+    <span class="badge">Station 8</span><span class="badge time">8 min</span>
+    <h2>🏆 Prove it</h2>
+    <p style="margin-top:8px">Practice only. The official Classroom post-test is separate and is not in this lab.</p>
+    <div id="finalQuiz"></div>
+    <div id="finalScore"></div>
+  </div>
+  <div class="card">
+    <div class="cert" id="cert" style="display:none">
+      <p class="muted">Project Hōkūlani</p>
+      <h3>Code Lab complete</h3>
+      <p>You finished an autonomous CS module: algorithm, sequence, loop, conditional, a drawing, and a 3-screen app.</p>
+      <p class="muted" id="certWhen"></p>
+    </div>
+  </div>
+  <div class="reqs" data-reqs="wrap"></div>
+  <div class="done-row"><button class="done-btn" data-done="wrap">Finish the Code Lab 🎉</button></div>
+</section>
+</main>
+<script>
+const WORKER = 'https://hokulani-cs-tutor.dkahiapo-46f.workers.dev';
+const SK = 'cs_auto';
+const stations = [
+  { id: 'start', label: '🏁 Start', reqs: {} },
+  { id: 'algo', label: '🧭 Tutor', reqs: { chat: 'Tutor turns', quiz_algo: 'Quiz' } },
+  { id: 'vocab', label: '🧩 Vocab', reqs: { tags: 'Tag game', quiz_vocab: 'Quiz' } },
+  { id: 'order', label: '🌺 Weave', reqs: { order: 'Card order' } },
+  { id: 'parts', label: '🔁 Parts', reqs: { parts: 'Loop / if / algorithm' } },
+  { id: 'draw', label: '🎨 Draw', reqs: { p0: 'Square', p1: 'Hexagon', p2: 'Rose' } },
+  { id: 'app', label: '📱 App', reqs: { app: 'Working 3-screen app' } },
+  { id: 'wrap', label: '🏆 Wrap', reqs: { quiz_final: 'Practice quiz' } },
+];
+const nav = document.getElementById('nav');
+const sections = {};
+document.querySelectorAll('section').forEach(s => sections[s.dataset.id] = s);
+let doneSet = new Set(JSON.parse(localStorage.getItem(SK+'_done') || '[]'));
+let reqState = JSON.parse(localStorage.getItem(SK+'_reqs') || '{}');
+function reqMet(stId, key) { return !!(reqState[stId] && reqState[stId][key]); }
+function stationReqsMet(st) { return Object.keys(st.reqs).every(k => reqMet(st.id, k)); }
+function unlockedIndex() {
+  for (let i = 0; i < stations.length; i++) if (!doneSet.has(stations[i].id)) return i;
+  return stations.length - 1;
+}
+function req(stId, key) {
+  if (!reqState[stId]) reqState[stId] = {};
+  if (reqState[stId][key]) return;
+  reqState[stId][key] = true;
+  localStorage.setItem(SK+'_reqs', JSON.stringify(reqState));
+  refreshReqs();
+}
+stations.forEach(st => {
+  const b = document.createElement('button');
+  b.textContent = st.label; b.dataset.target = st.id;
+  b.onclick = () => { if (!b.classList.contains('locked')) show(st.id); };
+  nav.appendChild(b);
+});
+function show(id) {
+  Object.values(sections).forEach(s => s.classList.remove('visible'));
+  sections[id].classList.add('visible');
+  nav.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.target === id));
+  window.scrollTo({ top: 0 });
+  localStorage.setItem(SK+'_cur', id);
+}
+function refreshReqs() {
+  const openIdx = unlockedIndex();
+  stations.forEach((st, i) => {
+    const wrap = document.querySelector('.reqs[data-reqs="'+st.id+'"]');
+    if (wrap) {
+      wrap.innerHTML = '';
+      Object.entries(st.reqs).forEach(([k, label]) => {
+        const c = document.createElement('span');
+        c.className = 'req-chip' + (reqMet(st.id, k) ? ' met' : '');
+        c.textContent = (reqMet(st.id, k) ? '✓ ' : '⬜ ') + label;
+        wrap.appendChild(c);
+      });
+    }
+    const btn = document.querySelector('[data-done="'+st.id+'"]');
+    if (btn && !doneSet.has(st.id)) btn.disabled = Object.keys(st.reqs).length ? !stationReqsMet(st) : false;
+    const nb = nav.querySelectorAll('button')[i];
+    nb.classList.toggle('done', doneSet.has(st.id));
+    nb.classList.toggle('locked', i > openIdx);
+  });
+  document.getElementById('progressFill').style.width = Math.round(doneSet.size / stations.length * 100) + '%';
+  document.getElementById('progressLabel').textContent = doneSet.size + ' of ' + stations.length + ' stations complete';
+}
+document.querySelectorAll('.done-btn').forEach(btn => {
+  const id = btn.dataset.done;
+  const sync = () => { if (doneSet.has(id)) { btn.classList.add('checked'); btn.textContent = 'Station complete ✓'; btn.disabled = false; } };
+  btn.onclick = () => {
+    if (doneSet.has(id)) return;
+    const st = stations.find(s => s.id === id);
+    if (Object.keys(st.reqs).length && !stationReqsMet(st)) return;
+    doneSet.add(id);
+    localStorage.setItem(SK+'_done', JSON.stringify([...doneSet]));
+    sync(); refreshReqs();
+    const i = stations.findIndex(s => s.id === id);
+    if (i >= 0 && i < stations.length - 1) show(stations[i + 1].id);
+    if (id === 'wrap') showCert();
+  };
+  sync();
+});
+const savedCur = localStorage.getItem(SK+'_cur') || 'start';
+const savedIdx = stations.findIndex(s => s.id === savedCur);
+show(savedIdx > unlockedIndex() ? stations[unlockedIndex()].id : savedCur);
+refreshReqs();
+
+function buildQuiz(mountId, questions, opts) {
+  const mount = document.getElementById(mountId);
+  let answered = 0, correct = 0;
+  questions.forEach(q => {
+    const wrap = document.createElement('div');
+    const h = document.createElement('p');
+    h.style.cssText = 'font-size:15px;font-weight:600;color:#e6e6f5;margin:14px 0 8px';
+    h.textContent = q.q; wrap.appendChild(h);
+    const fb = document.createElement('div'); fb.className = 'feedback';
+    q.opts.map((_, i) => i).sort(() => Math.random() - .5).forEach(i => {
+      const c = document.createElement('button'); c.className = 'choice'; c.textContent = q.opts[i];
+      c.onclick = () => {
+        if (wrap.dataset.locked) return;
+        wrap.dataset.locked = '1'; answered++;
+        wrap.querySelectorAll('.choice').forEach(x => x.disabled = true);
+        if (i === q.a) { correct++; c.classList.add('correct'); fb.textContent = '✓ ' + q.why; fb.classList.add('show','good'); }
+        else {
+          c.classList.add('wrong');
+          wrap.querySelectorAll('.choice').forEach(x => { if (x.textContent === q.opts[q.a]) x.classList.add('correct'); });
+          fb.textContent = '✗ ' + q.why; fb.classList.add('show','bad');
+        }
+        if (answered === questions.length) {
+          if (opts.scoreId) document.getElementById(opts.scoreId).innerHTML = '<div class="score-pill">'+correct+' / '+questions.length+(correct === questions.length ? '' : ' — fix the red ones (reset the page station by answering again after refresh if needed)')+'</div>';
+          if (correct === questions.length && opts.onDone) opts.onDone();
+        }
+      };
+      wrap.appendChild(c);
+    });
+    wrap.appendChild(fb); mount.appendChild(wrap);
+  });
+}
+
+/* Tutor */
+const chatLog = document.getElementById('chatLog');
+const hist = [];
+let turns = 0;
+function addMsg(role, text) {
+  const d = document.createElement('div'); d.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+  d.textContent = text; chatLog.appendChild(d); chatLog.scrollTop = chatLog.scrollHeight;
+}
+addMsg('bot', "Aloha. No teacher here — just us. Name something you do that has steps in a specific order.");
+async function sendChat() {
+  const inp = document.getElementById('chatInput');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  addMsg('user', text);
+  hist.push({ role: 'user', content: text });
+  const thinking = addMsg('bot', '…');
+  let reply = '';
+  try {
+    const r = await fetch(WORKER + '/tutor', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lesson: 'cs', messages: hist })
+    });
+    const j = await r.json();
+    if (!r.ok || !j.reply) throw new Error('bad');
+    reply = j.reply;
+  } catch (e) {
+    const t = text.toLowerCase();
+    if (/recipe|lei|poi|school|shoe|brush|game|weave|sail/.test(t)) reply = "That's a sequence — steps in order. What would you call the whole written list of those steps?";
+    else if (/algorithm|instruction|procedure|directions/.test(t)) reply = "Yes: an algorithm. How is a program different from that list?";
+    else if (/machine|computer|code|javascript|blockly/.test(t)) reply = "A program is an algorithm a machine can run. Give me a loop from your day.";
+    else reply = "Give me a concrete example from your life — cooking, a lei, getting out the door.";
+  }
+  thinking.textContent = reply;
+  hist.push({ role: 'assistant', content: reply });
+  turns++;
+  document.getElementById('chatStatus').textContent = turns >= 2 ? 'Tutor requirement met — finish the quiz.' : 'Keep going — two real answers unlock this station.';
+  if (turns >= 2) req('algo', 'chat');
+}
+document.getElementById('chatSend').onclick = sendChat;
+document.getElementById('chatInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
+
+buildQuiz('algoQuiz', [
+  { q: 'An algorithm is…', opts: ['A computer brand', 'A step-by-step instruction for a task', 'Only JavaScript', 'A random guess'], a: 1, why: 'A recipe, a lei, a dishwasher cycle.' },
+  { q: 'Hawaiian weavers following sail steps were using…', opts: ['Only modern tech', 'An algorithm, even without a computer', 'A program (a machine ran it)', 'Nothing related to CS'], a: 1, why: 'Algorithm ≠ computer. Program = algorithm a machine runs.' },
+], { onDone: () => req('algo', 'quiz_algo') });
+
+const tagItems = [
+  { t: 'Fold, roll, fold, roll until the rose is thick.', a: 'loop' },
+  { t: 'If four inches of leaf are left, add a strip. Else keep weaving.', a: 'conditional' },
+  { t: 'Shoes on, then walk out — never the reverse.', a: 'sequence' },
+  { t: 'Those weaving steps, written so this page’s artist can run them.', a: 'program' },
+];
+const tags = ['sequence', 'loop', 'conditional', 'program'];
+const tagGame = document.getElementById('tagGame');
+const tagPick = {};
+tagItems.forEach((it, n) => {
+  const d = document.createElement('div'); d.className = 'sort-item';
+  d.innerHTML = '<span>' + it.t + '</span>';
+  const row = document.createElement('div'); row.className = 'tag-row';
+  tags.forEach(tag => {
+    const b = document.createElement('button'); b.textContent = tag;
+    b.onclick = () => {
+      tagPick[n] = tag;
+      row.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      if (Object.keys(tagPick).length !== 4) return;
+      let ok = 0;
+      tagItems.forEach((x, i) => {
+        tagGame.children[i].classList.toggle('right', tagPick[i] === x.a);
+        tagGame.children[i].classList.toggle('wrong2', tagPick[i] !== x.a);
+        if (tagPick[i] === x.a) ok++;
+      });
+      const fb = document.getElementById('tagFb');
+      fb.className = 'feedback show ' + (ok === 4 ? 'good' : 'bad');
+      fb.textContent = ok === 4 ? '✓ All four.' : ok + ' / 4';
+      if (ok === 4) { document.getElementById('vocabDefs').style.display = 'block'; req('vocab', 'tags'); }
+    };
+    row.appendChild(b);
+  });
+  d.appendChild(row); tagGame.appendChild(d);
+});
+buildQuiz('vocabQuiz', [
+  { q: 'A sequence is…', opts: ['Actions in a specific order', 'A random list', 'A computer error', 'An iPad'], a: 0, why: '1 then 2 then 3. Wrong order is still a sequence.' },
+  { q: 'Algorithm vs program', opts: ['Same word', 'A program is an algorithm a machine can run', 'Algorithms need Wi-Fi', 'Programs cannot be wrong'], a: 1, why: 'Wrong directions are still an algorithm.' },
+], { onDone: () => req('vocab', 'quiz_vocab') });
+
+const ORD = [
+  { id: 1, text: 'Hold one lauhala strip horizontal as the base.' },
+  { id: 2, text: 'Fold the working strip over and begin the roll.' },
+  { id: 3, text: 'Repeat fold-and-roll (loop).' },
+  { id: 4, text: 'If ~4 inches remain, add a new strip; else continue (conditional).' },
+  { id: 5, text: 'Keep looping until the rose is the size you want.' },
+  { id: 6, text: 'Finish and secure.' },
+];
+let pool = ORD.map(x => x.id), seq = [];
+function renderOrd() {
+  const poolEl = document.getElementById('ordPool'), seqEl = document.getElementById('ordSeq');
+  poolEl.innerHTML = ''; seqEl.innerHTML = '';
+  pool.forEach(id => {
+    const b = document.createElement('button'); b.className = 'ord-card'; b.textContent = ORD.find(x => x.id === id).text;
+    b.onclick = () => { seq.push(id); pool = pool.filter(z => z !== id); renderOrd(); };
+    poolEl.appendChild(b);
+  });
+  seq.forEach((id, i) => {
+    const b = document.createElement('button'); b.className = 'ord-card';
+    b.textContent = (i + 1) + '. ' + ORD.find(x => x.id === id).text;
+    b.onclick = () => { pool.push(id); seq = seq.filter(z => z !== id); renderOrd(); };
+    seqEl.appendChild(b);
+  });
+}
+renderOrd();
+document.getElementById('ordReset').onclick = () => { pool = ORD.map(x => x.id); seq = []; document.getElementById('ordFb').className = 'feedback'; renderOrd(); };
+document.getElementById('ordCheck').onclick = () => {
+  const ok = seq.length === 6 && seq.every((id, i) => id === i + 1);
+  const fb = document.getElementById('ordFb');
+  fb.className = 'feedback show ' + (ok ? 'good' : 'bad');
+  fb.textContent = ok ? '✓ Sequence + loop + conditional. That is the algorithm.' : 'Not yet. Base → fold/roll → loop → if 4 inches → finish.';
+  if (ok) req('order', 'order');
+};
+
+const partItems = [
+  { t: 'Fold, then roll, then fold, then roll again.', a: 'loop' },
+  { t: 'If four inches left, add another leaf.', a: 'conditional' },
+  { t: 'The whole ordered set of cards.', a: 'algorithm' },
+];
+const partsGame = document.getElementById('partsGame');
+const partPick = {};
+partItems.forEach((it, n) => {
+  const d = document.createElement('div'); d.className = 'sort-item'; d.innerHTML = '<span>' + it.t + '</span>';
+  const row = document.createElement('div'); row.className = 'tag-row';
+  ['loop','conditional','algorithm'].forEach(tag => {
+    const b = document.createElement('button'); b.textContent = tag;
+    b.onclick = () => {
+      partPick[n] = tag;
+      row.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      if (Object.keys(partPick).length !== 3) return;
+      let ok = 0;
+      partItems.forEach((x, i) => {
+        partsGame.children[i].classList.toggle('right', partPick[i] === x.a);
+        partsGame.children[i].classList.toggle('wrong2', partPick[i] !== x.a);
+        if (partPick[i] === x.a) ok++;
+      });
+      const fb = document.getElementById('partsFb');
+      fb.className = 'feedback show ' + (ok === 3 ? 'good' : 'bad');
+      fb.textContent = ok === 3 ? '✓ Coding is writing that list for a machine.' : ok + ' / 3';
+      if (ok === 3) req('parts', 'parts');
+    };
+    row.appendChild(b);
+  });
+  d.appendChild(row); partsGame.appendChild(d);
+});
+
+/* Turtle */
+let tokens = [];
+const cv = document.getElementById('turtle');
+const ctx = cv.getContext('2d');
+function codeView() { document.getElementById('codeView').textContent = tokens.join(' ') || '(empty)'; }
+const CHIPS = [
+  { lab: 'forward 70', tok: 'fd 70' },
+  { lab: 'turn 90°', tok: 'rt 90' },
+  { lab: 'turn 60°', tok: 'rt 60' },
+  { lab: 'turn 45°', tok: 'rt 45' },
+  { lab: 'repeat 4 [', tok: 'repeat 4 [' },
+  { lab: 'repeat 6 [', tok: 'repeat 6 [' },
+  { lab: 'repeat 8 [', tok: 'repeat 8 [' },
+  { lab: ']', tok: ']' },
+];
+const bb = document.getElementById('blockBtns');
+CHIPS.forEach(c => {
+  const b = document.createElement('button'); b.className = 'chipbtn'; b.textContent = c.lab;
+  b.onclick = () => { tokens.push(c.tok); codeView(); };
+  bb.appendChild(b);
+});
+document.getElementById('undoBtn').onclick = () => { tokens.pop(); codeView(); };
+document.getElementById('clearBtn').onclick = () => { tokens = []; codeView(); drawTurtle({ segs: [] }); };
+
+function parseTokens(list) {
+  const src = list.slice();
+  function rec() {
+    const out = [];
+    while (src.length) {
+      const t = src.shift();
+      if (t === ']') return out;
+      if (t === 'fd' || t === 'rt') { const n = parseInt(src.shift(), 10); out.push({ op: t, n }); }
+      else if (t === 'repeat') {
+        const n = parseInt(src.shift(), 10);
+        src.shift(); // [
+        out.push({ op: 'repeat', n, body: rec() });
+      }
+    }
+    return out;
+  }
+  const joined = [];
+  list.forEach(x => x.split(' ').forEach(p => { if (p) joined.push(p); }));
+  const hold = tokens;
+  const flat = [];
+  hold.forEach(x => x.split(/\s+/).forEach(p => { if (p) flat.push(p); }));
+  const s = flat.slice();
+  function rec2() {
+    const out = [];
+    while (s.length) {
+      const t = s.shift();
+      if (t === ']') return out;
+      if (t === 'fd' || t === 'rt') out.push({ op: t, n: parseInt(s.shift(), 10) || 0 });
+      else if (t === 'repeat') {
+        const n = parseInt(s.shift(), 10) || 0;
+        if (s[0] === '[') s.shift();
+        out.push({ op: 'repeat', n, body: rec2() });
+      }
+    }
+    return out;
+  }
+  return rec2();
+}
+function execProg(prog) {
+  let x = 180, y = 180, a = -90;
+  const segs = [];
+  const turns = [];
+  function go(node) {
+    if (node.op === 'fd') {
+      const r = node.n * Math.PI / 180;
+      const nx = x + node.n * Math.cos(a * Math.PI / 180);
+      const ny = y + node.n * Math.sin(a * Math.PI / 180);
+      segs.push({ x1: x, y1: y, x2: nx, y2: ny, len: node.n });
+      x = nx; y = ny;
+    } else if (node.op === 'rt') { a += node.n; turns.push(node.n); }
+    else if (node.op === 'repeat') { for (let i = 0; i < node.n; i++) node.body.forEach(go); }
+  }
+  prog.forEach(go);
+  return { segs, turns, x, y };
+}
+function drawTurtle(res) {
+  ctx.fillStyle = '#0b0b14'; ctx.fillRect(0, 0, 360, 360);
+  ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2; ctx.beginPath();
+  res.segs.forEach((s, i) => { if (i === 0) ctx.moveTo(s.x1, s.y1); ctx.lineTo(s.x2, s.y2); });
+  ctx.stroke();
+}
+function usedRepeat(prog) { return prog.some(n => n.op === 'repeat' || (n.body && usedRepeat(n.body))); }
+function closedShape(r) {
+  if (!r.segs.length) return false;
+  const a = r.segs[0], b = r.segs[r.segs.length - 1];
+  return Math.hypot(a.x1 - b.x2, a.y1 - b.y2) < 28;
+}
+function equalSides(r) {
+  const lens = r.segs.map(s => s.len);
+  if (!lens.length) return false;
+  return Math.max.apply(null, lens) <= Math.min.apply(null, lens) * 1.2;
+}
+const puzzles = [
+  { id: 'p0', name: 'Puzzle 1 — Square', need: 'Repeat, 4 equal sides, closed. Hint: repeat 4 [ forward 70  turn 90° ]',
+    test: (r, p) => usedRepeat(p) && r.segs.length === 4 && closedShape(r) && equalSides(r) && r.turns.every(t => t === 90) },
+  { id: 'p1', name: 'Puzzle 2 — Hexagon', need: 'Repeat, 6 equal sides, closed. Hint: repeat 6 [ forward 70  turn 60° ]',
+    test: (r, p) => usedRepeat(p) && r.segs.length === 6 && closedShape(r) && equalSides(r) && r.turns.every(t => t === 60) },
+  { id: 'p2', name: 'Puzzle 3 — Rose-ish', need: 'Repeat, 8+ equal sides, closed. Hint: repeat 8 [ forward 40  turn 45° ]',
+    test: (r, p) => usedRepeat(p) && r.segs.length >= 8 && closedShape(r) && equalSides(r) },
+];
+const puzEl = document.getElementById('puzzles');
+puzzles.forEach(p => {
+  const d = document.createElement('div'); d.className = 'puzzle'; d.id = 'pz-'+p.id;
+  d.innerHTML = '<b>'+p.name+'</b><div class="muted">'+p.need+'</div>';
+  puzEl.appendChild(d);
+});
+document.getElementById('runBtn').onclick = () => {
+  let prog;
+  try { prog = parseTokens(tokens); } catch (e) { document.getElementById('drawMsg').textContent = 'Could not parse. Check your ] brackets.'; return; }
+  const res = execProg(prog);
+  drawTurtle(res);
+  let msg = res.segs.length + ' segments.';
+  puzzles.forEach(p => {
+    if (p.test(res, prog)) {
+      document.getElementById('pz-'+p.id).classList.add('won');
+      req('draw', p.id);
+      msg += ' ' + p.name + ' ✓';
+    }
+  });
+  document.getElementById('drawMsg').textContent = msg;
+};
+drawTurtle({ segs: [] });
+
+/* App */
+const screens = [
+  { title: '', body: '', a: '', ato: 1, b: '', bto: 0 },
+  { title: '', body: '', a: '', ato: 2, b: '', bto: 0 },
+  { title: '', body: '', a: '', ato: 0, b: '', bto: 0 },
+];
+let curPrev = 0;
+function loadScr() {
+  const i = +document.getElementById('scrSel').value;
+  const s = screens[i];
+  document.getElementById('scrTitle').value = s.title;
+  document.getElementById('scrBody').value = s.body;
+  document.getElementById('scrA').value = s.a;
+  document.getElementById('scrAto').value = s.ato;
+  document.getElementById('scrB').value = s.b;
+  document.getElementById('scrBto').value = s.bto;
+  renderApp();
+}
+function saveScr() {
+  const i = +document.getElementById('scrSel').value;
+  screens[i] = {
+    title: document.getElementById('scrTitle').value.trim(),
+    body: document.getElementById('scrBody').value.trim(),
+    a: document.getElementById('scrA').value.trim(),
+    ato: +document.getElementById('scrAto').value,
+    b: document.getElementById('scrB').value.trim(),
+    bto: +document.getElementById('scrBto').value,
+  };
+  renderApp();
+}
+['scrTitle','scrBody','scrA','scrB','scrAto','scrBto'].forEach(id => {
+  document.getElementById(id).addEventListener('input', saveScr);
+  document.getElementById(id).addEventListener('change', saveScr);
+});
+document.getElementById('scrSel').onchange = loadScr;
+function renderApp() {
+  const s = screens[curPrev];
+  const el = document.getElementById('appPrev');
+  el.innerHTML = '<h4>'+ (s.title || 'Untitled') +'</h4><p>'+ (s.body || '') +'</p>';
+  if (s.a) {
+    const b = document.createElement('button'); b.textContent = s.a;
+    b.onclick = () => { curPrev = s.ato; renderApp(); };
+    el.appendChild(b);
+  }
+  if (s.b) {
+    const b = document.createElement('button'); b.textContent = s.b;
+    b.onclick = () => { curPrev = s.bto; renderApp(); };
+    el.appendChild(b);
+  }
+}
+loadScr();
+document.getElementById('appCheck').onclick = () => {
+  const titled = screens.every(s => s.title.length >= 2);
+  const linked = screens.every(s => s.a);
+  const hops = new Set();
+  screens.forEach(s => { hops.add(s.ato); if (s.b) hops.add(s.bto); });
+  const visits = hops.size >= 2;
+  const ok = titled && linked && visits;
+  const msg = document.getElementById('appMsg');
+  msg.textContent = ok ? '✓ Three titled screens, buttons that move. That’s a program.' : 'Need a title on every screen, Button A on every screen, and buttons that reach at least two different screens.';
+  msg.style.color = ok ? '#34d399' : '#f8a3a3';
+  if (ok) req('app', 'app');
+};
+
+buildQuiz('finalQuiz', [
+  { q: 'An algorithm is…', opts: ['A brand', 'A list of steps to finish a task', 'Only JS', 'Random output'], a: 1, why: 'Part 1: step-by-step.' },
+  { q: 'A sequence is…', opts: ['Actions in a specific order', 'An infinite loop', 'A conditional', 'Unrelated'], a: 0, why: '1 then 2 then 3.' },
+  { q: 'Algorithm vs program', opts: ['No difference', 'A program is an algorithm a machine can run', 'Algorithms need Wi-Fi', 'Programs cannot fail'], a: 1, why: 'Wrong list is still an algorithm.' },
+  { q: 'Folding and rolling again and again is a…', opts: ['Conditional', 'Loop', 'Compiler', 'Deepfake'], a: 1, why: 'Repeat = loop.' },
+  { q: '“If four inches left, add a strip” is a…', opts: ['Loop', 'Conditional', 'Pixel', 'Browser'], a: 1, why: 'If/then.' },
+], { scoreId: 'finalScore', onDone: () => req('wrap', 'quiz_final') });
+
+function showCert() {
+  document.getElementById('cert').style.display = 'block';
+  document.getElementById('certWhen').textContent = new Date().toLocaleString();
+}
+if (doneSet.has('wrap')) showCert();
+</script>
+</body>
+</html>
